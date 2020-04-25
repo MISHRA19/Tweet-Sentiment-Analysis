@@ -1,0 +1,9 @@
+This project was created as part of Michigan University course on Python Programming. 
+The Aim of this project is to create a sentiment classifier based on input data provided 
+which are some synthetic (fake, semi-randomly generated) twitter data in a csv file which
+has the text of a tweet, the number of retweets of that tweet, and the number of replies to that tweet. 
+This input data needs to be classified against a positive word list and a negative word list
+which will eventually arrive at a net score for each tweet record.
+
+The Deliverable is to export out the result into excel and chart out a scatter analysis 
+between the no. of Retweets Vs Netscore
