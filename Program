@@ -1,0 +1,67 @@
+#Strip Punctuation
+#Define a function called strip_punctuation which takes one parameter, 
+#a string which represents a word, and removes characters considered punctuation from everywhere in the word.
+
+punctuation_chars = ["'", '"', ",", ".", "!", ":", ";", '#', '@']
+
+def strip_punctuation(st):
+    for x in st.lower():
+        if x in punctuation_chars:
+            st=st.replace(x,'')
+    return st
+  
+# list of positive words to use. Refers,opens and cleans the Positive word list file
+positive_words = []
+with open("positive_words.txt") as pos_f:
+    for lin in pos_f:
+        if lin[0] != ';' and lin[0] != '\n':
+            positive_words.append(lin.strip())
+            
+# Function get_pos to count the positive score of each tweet record input
+def get_pos(sent):
+    posc=0
+    sent_new=strip_punctuation(sent)
+    slst=sent_new.lower().split()
+    for i in slst:
+        if i in positive_words:
+            posc+=1
+    return posc
+    
+# Function to create Negative word list
+negative_words = []
+with open("negative_words.txt") as pos_f:
+    for lin in pos_f:
+        if lin[0] != ';' and lin[0] != '\n':
+            negative_words.append(lin.strip())
+            
+# Function to count Negative words
+
+def get_neg(sent):
+    negc=0
+    sent_new=strip_punctuation(sent)
+    slst=sent_new.lower().split()
+    for i in slst:
+        if i in negative_words:
+            negc+=1
+    return negc
+
+# Open Input data in read mode and open output file in write mode
+projectTwitterDataFile = open("project_twitter_data.csv","r")
+resultingDataFile = open("resulting_data.csv","w")
+
+# Function to Write in the required format
+def writeInDataFile(resultingDataFile):
+    resultingDataFile.write("Number of Retweets, Number of Replies, Positive Score, Negative Score, Net Score")
+    resultingDataFile.write("\n")
+
+    linesPTDF =  projectTwitterDataFile.readlines()
+    headerDontUsed= linesPTDF.pop(0)
+    for linesTD in linesPTDF:
+        listTD = linesTD.strip().split(',')
+        resultingDataFile.write("{}, {}, {}, {}, {}".format(listTD[1], listTD[2], get_pos(listTD[0]), get_neg(listTD[0]), (get_pos(listTD[0])-get_neg(listTD[0]))))    
+        resultingDataFile.write("\n")
+
+      
+writeInDataFile(resultingDataFile)
+projectTwitterDataFile.close()
+resultingDataFile.close()
